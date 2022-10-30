@@ -1,0 +1,4 @@
+data/*
+!data/devices.json
+Cargo.lock
+target

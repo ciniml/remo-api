@@ -1,4 +1,4 @@
-# Unofficial Rust implementation of Nature Remo Cloud API parser.
+# Unofficial Rust implementation of Remo Cloud API parser.
 
 ## 概要
 

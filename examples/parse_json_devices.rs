@@ -1,5 +1,5 @@
 use embedded_io::adapters;
-use nature_api::json::{DefaultParserCallbackResult, JsonNode, Parser, ParserCallbackAction};
+use remo_api::json::{DefaultParserCallbackResult, JsonNode, Parser, ParserCallbackAction};
 use std::{fs::File, io::Read};
 
 fn main() {

@@ -29,3 +29,8 @@ required-features = ["std"]
 [[example]]
 name = "parse_devices"
 required-features = ["std"]
+
+
+[[example]]
+name = "parse_appliances"
+required-features = ["std"]

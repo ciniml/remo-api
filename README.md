@@ -9,10 +9,17 @@ Nature RemoシリーズのCloud APIが返すJSONデータを解析し、各種�
 * `GET /1/devices` https://swagger.nature.global/#/default/get_1_devices
     * ユーザーが操作可能なRemoデバイス一覧と状態を取得する
 
-## 対応予定
 
 * `GET /1/appliances` https://swagger.nature.global/#/default/get_1_appliances
     * 登録されている制御対象の機器一覧と状態を取得する。
+    * 部分対応
+        * 各アプライアンスに対する `device` `model` `smart_meter` ノードのみ対応
+        * 他のノードは無視します。
+    
+
+## 対応予定
+
+* 気が向いたら `appliances` の他のノードにも対応
 
 ## 使い方
 

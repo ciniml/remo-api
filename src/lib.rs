@@ -7,7 +7,10 @@
 pub mod json;
 pub mod config;
 mod device;
+mod appliances;
 mod common_types;
+mod node_key;
 
 pub use device::*;
+pub use appliances::*;
 pub use common_types::*;

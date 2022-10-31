@@ -19,6 +19,7 @@ use nom::{
 use uuid::Uuid;
 use crate::config::*;
 use crate::common_types::*;
+use crate::node_key::*;
 
 #[derive(Clone, Debug, Default)]
 pub struct SensorValue {
@@ -66,22 +67,6 @@ pub struct Model {
 }
 
 #[derive(Debug)]
-pub enum ApplianceType {
-    AC,
-    TV,
-    Light,
-    IR,
-    SmartMeter,
-}
-#[derive(Debug, Default)]
-pub struct EchonetLiteProperty {
-    pub name: String<MAX_ECHONET_LITE_NAME_LEN>,
-    pub epc: u32,
-    pub val: String<MAX_ECHONET_LITE_VALUE_LEN>,
-    pub updated_at: Timestamp,
-}
-
-#[derive(Debug)]
 pub enum DeviceSubNode {
     User(User),
     NewestEvents(NewestEvents),
@@ -107,77 +92,6 @@ enum NewestEventType {
     Humidity,
     Illumination,
     Motion,
-}
-
-enum DeviceNodeKey {
-    Name,
-    Id,
-    CreatedAt,
-    UpdatedAt,
-    MacAddress,
-    BtMacAddress,
-    SerialNumber,
-    FirmwareVersion,
-    TemperatureOffset,
-    HumidityOffset,
-    Users,
-    NickName,
-    SuperUser,
-    NewestEvents,
-    Te,
-    Hu,
-    Il,
-    Mo,
-    Val,
-}
-
-impl<'a> TryFrom<&'a str> for DeviceNodeKey {
-    type Error = ();
-    fn try_from(s: &'a str) -> Result<Self, Self::Error> {
-        match s {
-            "name" => Ok(Self::Name),
-            "id" => Ok(Self::Id),
-            "created_at" => Ok(Self::CreatedAt),
-            "updated_at" => Ok(Self::UpdatedAt),
-            "mac_address" => Ok(Self::MacAddress),
-            "bt_mac_address" => Ok(Self::BtMacAddress),
-            "serial_number" => Ok(Self::SerialNumber),
-            "firmware_version" => Ok(Self::FirmwareVersion),
-            "temperature_offset" => Ok(Self::TemperatureOffset),
-            "humidity_offset" => Ok(Self::HumidityOffset),
-            "users" => Ok(Self::Users),
-            "nickname" => Ok(Self::NickName),
-            "superuser" => Ok(Self::SuperUser),
-            "newest_events" => Ok(Self::NewestEvents),
-            "te" => Ok(Self::Te),
-            "hu" => Ok(Self::Hu),
-            "il" => Ok(Self::Il),
-            "mo" => Ok(Self::Mo),
-            "val" => Ok(Self::Val),
-            _ => Err(()),
-        }
-    }
-}
-
-pub type UnexpectedNodeError = String<64>;
-
-#[derive(Debug)]
-pub enum DeviceNodeParseError {
-    UuidParseError,
-    TimestampParseError,
-    MacAddressParseError,
-    UnknownNewestEventsType,
-    UnexpectedNode(UnexpectedNodeError),
-}
-impl From<uuid::Error> for DeviceNodeParseError {
-    fn from(_: uuid::Error) -> Self {
-        Self::UuidParseError
-    }
-}
-impl From<chrono::ParseError> for DeviceNodeParseError {
-    fn from(_: chrono::ParseError) -> Self {
-        Self::TimestampParseError
-    }
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -231,10 +145,10 @@ fn parse_mac_address<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
 }
 
 impl FromStr for MacAddress {
-    type Err = DeviceNodeParseError;
+    type Err = ModelNodeParseError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let (_, mac_address) = parse_mac_address(s)
-            .map_err(|_: nom::Err<()>| DeviceNodeParseError::MacAddressParseError)?;
+            .map_err(|_: nom::Err<()>| ModelNodeParseError::MacAddressParseError)?;
         Ok(Self(mac_address))
     }
 }
@@ -243,7 +157,7 @@ pub fn read_devices<R: embedded_io::blocking::Read, F>(
     reader: &mut R,
     total_length: Option<usize>,
     mut callback: F,
-) -> Result<(), JsonParserError<R::Error, DeviceNodeParseError>>
+) -> Result<(), JsonParserError<R::Error, ModelNodeParseError>>
 where
     F: for<'a> FnMut(&'a Device, Option<&'a DeviceSubNode>),
 {
@@ -273,7 +187,7 @@ where
             (map_state, JsonNode::Key(key)) => {
                 match key {
                     JsonScalarValue::String(key) => {
-                        node_key = DeviceNodeKey::try_from(key).ok(); // Store key
+                        node_key = ModelNodeKey::try_from(key).ok(); // Store key
                     }
                     _ => {}
                 }
@@ -283,34 +197,34 @@ where
             (DevicesParserState::DeviceMap, JsonNode::Value(value)) => {
                 if let Some(node_key) = node_key.take() {
                     match (node_key, value) {
-                        (DeviceNodeKey::Name, JsonScalarValue::String(s)) => {
+                        (ModelNodeKey::Name, JsonScalarValue::String(s)) => {
                             device.name = String::from(s)
                         }
-                        (DeviceNodeKey::Id, JsonScalarValue::String(s)) => {
+                        (ModelNodeKey::Id, JsonScalarValue::String(s)) => {
                             device.id = Uuid::from_str(s)?
                         }
-                        (DeviceNodeKey::CreatedAt, JsonScalarValue::String(s)) => {
+                        (ModelNodeKey::CreatedAt, JsonScalarValue::String(s)) => {
                             device.created_at = Timestamp::from_str(s)?
                         }
-                        (DeviceNodeKey::UpdatedAt, JsonScalarValue::String(s)) => {
+                        (ModelNodeKey::UpdatedAt, JsonScalarValue::String(s)) => {
                             device.updated_at = Timestamp::from_str(s)?
                         }
-                        (DeviceNodeKey::MacAddress, JsonScalarValue::String(s)) => {
+                        (ModelNodeKey::MacAddress, JsonScalarValue::String(s)) => {
                             device.mac_address = MacAddress::from_str(s)?
                         }
-                        (DeviceNodeKey::BtMacAddress, JsonScalarValue::String(s)) => {
+                        (ModelNodeKey::BtMacAddress, JsonScalarValue::String(s)) => {
                             device.bt_mac_address = MacAddress::from_str(s)?
                         }
-                        (DeviceNodeKey::SerialNumber, JsonScalarValue::String(s)) => {
+                        (ModelNodeKey::SerialNumber, JsonScalarValue::String(s)) => {
                             device.serial_number = String::from(s)
                         }
-                        (DeviceNodeKey::FirmwareVersion, JsonScalarValue::String(s)) => {
+                        (ModelNodeKey::FirmwareVersion, JsonScalarValue::String(s)) => {
                             device.firmware_version = String::from(s)
                         }
-                        (DeviceNodeKey::TemperatureOffset, JsonScalarValue::Number(n)) => {
+                        (ModelNodeKey::TemperatureOffset, JsonScalarValue::Number(n)) => {
                             device.temperature_offset = n.into()
                         }
-                        (DeviceNodeKey::HumidityOffset, JsonScalarValue::Number(n)) => {
+                        (ModelNodeKey::HumidityOffset, JsonScalarValue::Number(n)) => {
                             device.humidity_offset = n.into()
                         }
                         _ => {} // Ignore unknown nodes.
@@ -320,7 +234,7 @@ where
             }
             (DevicesParserState::DeviceMap, JsonNode::StartArray) => {
                 match node_key.take() {
-                    Some(DeviceNodeKey::Users) => {
+                    Some(ModelNodeKey::Users) => {
                         // Call callback for current device
                         callback(&device, None);
                         DevicesParserState::UsersArray
@@ -332,7 +246,7 @@ where
                 }
             }
             (DevicesParserState::DeviceMap, JsonNode::StartMap) => match node_key.take() {
-                Some(DeviceNodeKey::NewestEvents) => {
+                Some(ModelNodeKey::NewestEvents) => {
                     subnode = DeviceSubNode::NewestEvents(NewestEvents::default());
                     DevicesParserState::NewestEventsMap
                 }
@@ -355,13 +269,13 @@ where
                 if let DeviceSubNode::User(ref mut user) = &mut subnode {
                     if let Some(node_key) = node_key.take() {
                         match (node_key, value) {
-                            (DeviceNodeKey::Id, JsonScalarValue::String(s)) => {
+                            (ModelNodeKey::Id, JsonScalarValue::String(s)) => {
                                 user.id = Uuid::from_str(s)?
                             }
-                            (DeviceNodeKey::NickName, JsonScalarValue::String(s)) => {
+                            (ModelNodeKey::NickName, JsonScalarValue::String(s)) => {
                                 user.nickname = String::from(s)
                             }
-                            (DeviceNodeKey::SuperUser, JsonScalarValue::Boolean(v)) => {
+                            (ModelNodeKey::SuperUser, JsonScalarValue::Boolean(v)) => {
                                 user.superuser = v
                             }
                             _ => {} // Ignore unknown nodes.
@@ -391,23 +305,23 @@ where
                 };
 
                 match node_key.take() {
-                    Some(DeviceNodeKey::Te) => {
+                    Some(ModelNodeKey::Te) => {
                         newest_events.temperature = Some(SensorValue::default());
                         DevicesParserState::NewestEventMap(NewestEventType::Temperature)
                     }
-                    Some(DeviceNodeKey::Hu) => {
+                    Some(ModelNodeKey::Hu) => {
                         newest_events.humidity = Some(SensorValue::default());
                         DevicesParserState::NewestEventMap(NewestEventType::Humidity)
                     }
-                    Some(DeviceNodeKey::Il) => {
+                    Some(ModelNodeKey::Il) => {
                         newest_events.illumination = Some(SensorValue::default());
                         DevicesParserState::NewestEventMap(NewestEventType::Illumination)
                     }
-                    Some(DeviceNodeKey::Mo) => {
+                    Some(ModelNodeKey::Mo) => {
                         newest_events.motion = Some(SensorValue::default());
                         DevicesParserState::NewestEventMap(NewestEventType::Motion)
                     }
-                    _ => return Err(DeviceNodeParseError::UnknownNewestEventsType),
+                    _ => return Err(ModelNodeParseError::UnknownNewestEventsType),
                 }
             }
             // Process maps in a newest_events map
@@ -425,10 +339,10 @@ where
                         NewestEventType::Motion => newest_events.motion.as_mut().unwrap(),
                     };
                     match (node_key.take(), value) {
-                        (Some(DeviceNodeKey::Val), JsonScalarValue::Number(n)) => {
+                        (Some(ModelNodeKey::Val), JsonScalarValue::Number(n)) => {
                             sensor_value.val = n.into()
                         }
-                        (Some(DeviceNodeKey::CreatedAt), JsonScalarValue::String(s)) => {
+                        (Some(ModelNodeKey::CreatedAt), JsonScalarValue::String(s)) => {
                             sensor_value.created_at = Timestamp::from_str(s)?
                         }
                         _ => {}
@@ -468,7 +382,7 @@ where
             (state, json_node) => {
                 let mut error = UnexpectedNodeError::new();
                 write!(&mut error, "{:?}", (state, json_node)).ok();
-                return Err(DeviceNodeParseError::UnexpectedNode(error));
+                return Err(ModelNodeParseError::UnexpectedNode(error));
             }
         };
         state = new_state;

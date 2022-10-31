@@ -1,0 +1,312 @@
+[
+    {
+        "id": "84875896-9f1e-44df-9f49-7989352eeecf",
+        "device": {
+            "name": "てすとりも",
+            "id": "8afdef94-43f7-4a16-b499-fbb6286f7438",
+            "created_at": "2022-10-14T05:51:30Z",
+            "updated_at": "2022-10-15T02:15:00Z",
+            "mac_address": "c8:2b:96:00:11:22",
+            "bt_mac_address": "c8:2b:96:33:44:55",
+            "serial_number": "1W300000000000",
+            "firmware_version": "Remo/1.9.9",
+            "temperature_offset": 0,
+            "humidity_offset": 0
+        },
+        "model": {
+            "id": "2a556fb6-f64b-4bd2-a911-610aa68dfc05",
+            "country": "JP",
+            "manufacturer": "sharp",
+            "remote_name": "a986jb",
+            "series": "",
+            "name": "Sharp AC 033",
+            "image": "ico_ac_1"
+        },
+        "type": "AC",
+        "nickname": "てすとエアコン",
+        "image": "ico_ac_1",
+        "settings": {
+            "temp": "0",
+            "temp_unit": "c",
+            "mode": "auto",
+            "vol": "auto",
+            "dir": "auto",
+            "dirh": "auto",
+            "button": "power-off",
+            "updated_at": "2022-10-14T07:20:19Z"
+        },
+        "aircon": {
+            "range": {
+                "modes": {
+                    "auto": {
+                        "temp": [
+                            "-2",
+                            "-1.5",
+                            "-1",
+                            "-0.5",
+                            "0",
+                            "0.5",
+                            "1",
+                            "1.5",
+                            "2"
+                        ],
+                        "dir": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5",
+                            "auto",
+                            "swing"
+                        ],
+                        "dirh": [
+                            "1",
+                            "2",
+                            "3",
+                            "auto",
+                            "swing"
+                        ],
+                        "vol": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5",
+                            "auto"
+                        ]
+                    },
+                    "blow": {
+                        "temp": [
+                            ""
+                        ],
+                        "dir": [
+                            "3",
+                            "4",
+                            "swing"
+                        ],
+                        "dirh": [
+                            "1",
+                            "2",
+                            "3",
+                            "auto",
+                            "swing"
+                        ],
+                        "vol": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "auto"
+                        ]
+                    },
+                    "cool": {
+                        "temp": [
+                            "18",
+                            "18.5",
+                            "19",
+                            "19.5",
+                            "20",
+                            "20.5",
+                            "21",
+                            "21.5",
+                            "22",
+                            "22.5",
+                            "23",
+                            "23.5",
+                            "24",
+                            "24.5",
+                            "25",
+                            "25.5",
+                            "26",
+                            "26.5",
+                            "27",
+                            "27.5",
+                            "28",
+                            "28.5",
+                            "29",
+                            "29.5",
+                            "30",
+                            "30.5",
+                            "31",
+                            "31.5",
+                            "32"
+                        ],
+                        "dir": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5",
+                            "auto",
+                            "swing"
+                        ],
+                        "dirh": [
+                            "1",
+                            "2",
+                            "3",
+                            "auto",
+                            "swing"
+                        ],
+                        "vol": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5",
+                            "auto"
+                        ]
+                    },
+                    "dry": {
+                        "temp": [
+                            "-2",
+                            "-1.5",
+                            "-1",
+                            "-0.5",
+                            "0",
+                            "0.5",
+                            "1",
+                            "1.5",
+                            "2"
+                        ],
+                        "dir": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5",
+                            "auto",
+                            "swing"
+                        ],
+                        "dirh": [
+                            "1",
+                            "2",
+                            "3",
+                            "auto",
+                            "swing"
+                        ],
+                        "vol": [
+                            ""
+                        ]
+                    },
+                    "warm": {
+                        "temp": [
+                            "18",
+                            "18.5",
+                            "19",
+                            "19.5",
+                            "20",
+                            "20.5",
+                            "21",
+                            "21.5",
+                            "22",
+                            "22.5",
+                            "23",
+                            "23.5",
+                            "24",
+                            "24.5",
+                            "25",
+                            "25.5",
+                            "26",
+                            "26.5",
+                            "27",
+                            "27.5",
+                            "28",
+                            "28.5",
+                            "29",
+                            "29.5",
+                            "30",
+                            "30.5",
+                            "31",
+                            "31.5",
+                            "32"
+                        ],
+                        "dir": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5",
+                            "auto",
+                            "swing"
+                        ],
+                        "dirh": [
+                            "1",
+                            "2",
+                            "3",
+                            "auto",
+                            "swing"
+                        ],
+                        "vol": [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5",
+                            "auto"
+                        ]
+                    }
+                },
+                "fixedButtons": [
+                    "power-off"
+                ]
+            },
+            "tempUnit": "c"
+        },
+        "signals": []
+    },
+    {
+        "id": "081c5163-ee9e-486e-ba4d-e86a16ea4c9b",
+        "device": {
+            "name": "Remo E lite",
+            "id": "159c34f6-d99a-46ca-a50a-3440ba7f8c8e",
+            "created_at": "2022-10-08T07:49:56Z",
+            "updated_at": "2022-10-08T07:52:43Z",
+            "mac_address": "34:ab:95:00:11:22",
+            "bt_mac_address": "34:ab:95:33:44:55",
+            "serial_number": "4W012345678901",
+            "firmware_version": "Remo-E-lite/1.7.2",
+            "temperature_offset": 0,
+            "humidity_offset": 0
+        },
+        "model": {
+            "id": "1eb17958-9a47-4000-8b9d-b3dffaf9616c",
+            "manufacturer": "",
+            "name": "Smart Meter",
+            "image": "ico_smartmeter"
+        },
+        "type": "EL_SMART_METER",
+        "nickname": "スマートメーター",
+        "image": "ico_smartmeter",
+        "settings": null,
+        "aircon": null,
+        "signals": [],
+        "smart_meter": {
+            "echonetlite_properties": [
+                {
+                    "name": "cumulative_electric_energy_effective_digits",
+                    "epc": 215,
+                    "val": "7",
+                    "updated_at": "2022-10-22T11:38:14Z"
+                },
+                {
+                    "name": "normal_direction_cumulative_electric_energy",
+                    "epc": 224,
+                    "val": "1097158",
+                    "updated_at": "2022-10-22T11:38:14Z"
+                },
+                {
+                    "name": "cumulative_electric_energy_unit",
+                    "epc": 225,
+                    "val": "2",
+                    "updated_at": "2022-10-22T11:38:14Z"
+                },
+                {
+                    "name": "measured_instantaneous",
+                    "epc": 231,
+                    "val": "397",
+                    "updated_at": "2022-10-22T11:38:14Z"
+                }
+            ]
+        }
+    }
+]

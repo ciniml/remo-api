@@ -51,7 +51,7 @@ impl<'a> TryFrom<&'a str> for ApplianceType {
     }
 }
 
-#[derive(Debug, Default, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct EchonetLiteProperty {
     pub name: String<MAX_ECHONET_LITE_NAME_LEN>,
     pub epc: u32,
@@ -59,7 +59,7 @@ pub struct EchonetLiteProperty {
     pub updated_at: Timestamp,
 }
 
-#[derive(Debug, Default, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct ApplianceModel {
     pub id: Uuid,
     pub country: String<MAX_COUNTRY_LEN>,
@@ -70,7 +70,7 @@ pub struct ApplianceModel {
     pub image: String<MAX_IMAGE_LEN>,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum ApplianceSubNode {
     Device(Device),
     Model(ApplianceModel),

@@ -2,8 +2,8 @@
 // Copyright 2022 Kenta Ida 
 // SPDX-License-Identifier: MIT
 //
-pub const MAX_FIRMWARE_VERSION_LEN: usize = 32;
-pub const MAX_NICKNAME_LEN: usize = 32;
+pub const MAX_FIRMWARE_VERSION_LEN: usize = 48;
+pub const MAX_NICKNAME_LEN: usize = 48;
 pub const MAX_MODEL_NAME_LEN: usize = 32;
 pub const MAX_DEVICE_NAME_LEN: usize = 48;
 pub const MAX_MANUFACTURER_LEN: usize = 16;

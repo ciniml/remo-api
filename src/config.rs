@@ -4,12 +4,12 @@
 //
 pub const MAX_FIRMWARE_VERSION_LEN: usize = 48;
 pub const MAX_NICKNAME_LEN: usize = 48;
-pub const MAX_MODEL_NAME_LEN: usize = 32;
+pub const MAX_MODEL_NAME_LEN: usize = 64;
 pub const MAX_DEVICE_NAME_LEN: usize = 48;
-pub const MAX_MANUFACTURER_LEN: usize = 16;
-pub const MAX_REMOTE_NAME_LEN: usize = 16;
-pub const MAX_SERIES_LEN: usize = 16;
-pub const MAX_IMAGE_LEN: usize = 16;
+pub const MAX_MANUFACTURER_LEN: usize = 32;
+pub const MAX_REMOTE_NAME_LEN: usize = 32;
+pub const MAX_SERIES_LEN: usize = 32;
+pub const MAX_IMAGE_LEN: usize = 32;
 pub const MAX_COUNTRY_LEN: usize = 8;
 pub const MAX_ECHONET_LITE_NAME_LEN: usize = 64;
 pub const MAX_ECHONET_LITE_VALUE_LEN: usize = 16;

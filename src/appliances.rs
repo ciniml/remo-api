@@ -23,13 +23,21 @@ pub struct Appliance {
     pub image: String<MAX_IMAGE_LEN>,
 }
 
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum ApplianceType {
     AC,
     TV,
     Light,
     IR,
     SmartMeter,
+    ElectricWaterHeater,
+    PowerDistMeter,
+    EVCD,
+    SolarPower,
+    StorageBattery,
+    QrioLock,
+    MorninPlus,
+    //Custom(String<16>),
 }
 impl Default for ApplianceType {
     fn default() -> Self {
@@ -46,6 +54,14 @@ impl<'a> TryFrom<&'a str> for ApplianceType {
             "LIGHT" => Ok(Self::Light),
             "IR" => Ok(Self::IR),
             "EL_SMART_METER" => Ok(Self::SmartMeter),
+            "EL_ELECTRIC_WATER_HEATER" => Ok(Self::ElectricWaterHeater),
+            "EL_POWER_DIST_METER" => Ok(Self::PowerDistMeter),
+            "EL_EVCD" => Ok(Self::EVCD),
+            "EL_SOLAR_POWER" => Ok(Self::SolarPower),
+            "EL_STORAGE_BATTERY" => Ok(Self::StorageBattery),
+            "QRIO_LOCK" => Ok(Self::QrioLock),
+            "MORNIN_PLUS" => Ok(Self::MorninPlus),
+            //s => Ok(Self::Custom(String::from_str(s).map_err(|_| ())?)),
             _ => Err(()),
         }
     }

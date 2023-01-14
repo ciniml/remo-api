@@ -1,13 +1,13 @@
 // Appliance model parser for Remo Cloud API.
-// Copyright 2022 Kenta Ida 
+// Copyright 2022-2023 Kenta Ida 
 // SPDX-License-Identifier: MIT
 //
 use core::{str::FromStr};
 
 use heapless::{String, Vec};
-use crate::json::{JsonScalarValue, ParserCallbackAction, JsonNode, JsonNumber};
-use crate::json::Parser as JsonParser;
-use crate::json::ParserError as JsonParserError;
+use fuga_json_seq_parser::{JsonScalarValue, ParserCallbackAction, JsonNode, JsonNumber};
+use fuga_json_seq_parser::Parser as JsonParser;
+use fuga_json_seq_parser::ParserError as JsonParserError;
 
 use uuid::Uuid;
 use crate::{config::*, Device};
@@ -93,7 +93,7 @@ pub enum ApplianceSubNode {
     EchonetLiteProperty(EchonetLiteProperty),
 }
 
-type AppliancesParser = JsonParser<REQUIRED_APPLIANCES_PARSER_BUFFER_LEN, 10>;
+type AppliancesParser = JsonParser<REQUIRED_APPLIANCES_PARSER_BUFFER_LEN, 7>;
 
 #[derive(Clone, Copy, Debug)]
 enum AppliancesParserState {

@@ -1,5 +1,5 @@
 // Model parameter configuration of Remo Cloud API models.
-// Copyright 2022 Kenta Ida 
+// Copyright 2022-2023 Kenta Ida 
 // SPDX-License-Identifier: MIT
 //
 pub const MAX_FIRMWARE_VERSION_LEN: usize = 48;

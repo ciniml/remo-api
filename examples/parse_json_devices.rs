@@ -1,5 +1,5 @@
 use embedded_io::adapters;
-use remo_api::json::{DefaultParserCallbackResult, JsonNode, Parser, ParserCallbackAction};
+use fuga_json_seq_parser::{DefaultParserCallbackResult, JsonNode, Parser, ParserCallbackAction};
 use std::{fs::File, io::Read};
 
 fn main() {

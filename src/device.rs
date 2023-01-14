@@ -1,13 +1,13 @@
 // Device model parser for Remo Cloud API.
-// Copyright 2022 Kenta Ida 
+// Copyright 2022-2023 Kenta Ida 
 // SPDX-License-Identifier: MIT
 //
 use core::{fmt::Write, str::FromStr};
 
 use heapless::String;
-use crate::json::{JsonScalarValue, ParserCallbackAction, JsonNode};
-use crate::json::Parser as JsonParser;
-use crate::json::ParserError as JsonParserError;
+use fuga_json_seq_parser::{JsonScalarValue, ParserCallbackAction, JsonNode};
+use fuga_json_seq_parser::Parser as JsonParser;
+use fuga_json_seq_parser::ParserError as JsonParserError;
 
 use nom::{
     character::complete::one_of,
@@ -72,7 +72,7 @@ pub enum DeviceSubNode {
     NewestEvents(NewestEvents),
 }
 
-type DevicesParser = JsonParser<REQUIRED_DEVICES_PARSER_BUFFER_LEN, 6>;
+type DevicesParser = JsonParser<REQUIRED_DEVICES_PARSER_BUFFER_LEN, 5>;
 
 #[derive(Clone, Copy, Debug)]
 enum DevicesParserState {

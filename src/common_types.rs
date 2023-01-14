@@ -1,5 +1,5 @@
 // Common types for Remo API models.
-// Copyright 2022 Kenta Ida 
+// Copyright 2022-2023 Kenta Ida 
 // SPDX-License-Identifier: MIT
 //
 

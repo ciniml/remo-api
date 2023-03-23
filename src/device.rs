@@ -20,6 +20,7 @@ use uuid::Uuid;
 use crate::config::*;
 use crate::common_types::*;
 use crate::node_key::*;
+use crate::parser_options::{ParserOptions, copy_string_option};
 
 #[derive(Clone, Debug, Default)]
 pub struct SensorValue {
@@ -156,6 +157,7 @@ impl FromStr for MacAddress {
 pub fn read_devices<R: embedded_io::blocking::Read, F>(
     reader: &mut R,
     total_length: Option<usize>,
+    options: &ParserOptions,
     mut callback: F,
 ) -> Result<(), JsonParserError<R::Error, ModelNodeParseError>>
 where
@@ -198,7 +200,7 @@ where
                 if let Some(node_key) = node_key.take() {
                     match (node_key, value) {
                         (ModelNodeKey::Name, JsonScalarValue::String(s)) => {
-                            device.name = String::from(s)
+                            device.name = copy_string_option(s, options)?;
                         }
                         (ModelNodeKey::Id, JsonScalarValue::String(s)) => {
                             device.id = Uuid::from_str(s)?
@@ -216,10 +218,10 @@ where
                             device.bt_mac_address = MacAddress::from_str(s)?
                         }
                         (ModelNodeKey::SerialNumber, JsonScalarValue::String(s)) => {
-                            device.serial_number = String::from(s)
+                            device.serial_number = copy_string_option(s, options)?;
                         }
                         (ModelNodeKey::FirmwareVersion, JsonScalarValue::String(s)) => {
-                            device.firmware_version = String::from(s)
+                            device.firmware_version = copy_string_option(s, options)?;
                         }
                         (ModelNodeKey::TemperatureOffset, JsonScalarValue::Number(n)) => {
                             device.temperature_offset = n.into()
@@ -273,7 +275,7 @@ where
                                 user.id = Uuid::from_str(s)?
                             }
                             (ModelNodeKey::NickName, JsonScalarValue::String(s)) => {
-                                user.nickname = String::from(s)
+                                user.nickname = copy_string_option(s, options)?;
                             }
                             (ModelNodeKey::SuperUser, JsonScalarValue::Boolean(v)) => {
                                 user.superuser = v
@@ -393,7 +395,7 @@ where
 
 #[cfg(test)]
 mod test {
-    use crate::json::BufferReader;
+    use fuga_json_seq_parser::BufferReader;
     use uuid::uuid;
 
     use super::*;
@@ -422,7 +424,7 @@ mod test {
         ]
         ",
         );
-        read_devices(&mut reader, Some(length), |_device, _sub_node| {
+        read_devices(&mut reader, Some(length), &ParserOptions::default(), |_device, _sub_node| {
             panic!("callback must not be called for empty devices.");
         })
         .unwrap();
@@ -472,6 +474,7 @@ mod test {
         read_devices(
             &mut reader,
             Some(length),
+            &ParserOptions::default(),
             |device, sub_node| match sub_node {
                 None => {
                     let expected_device = expected_devices_iter.next();

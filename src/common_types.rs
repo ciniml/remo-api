@@ -20,6 +20,7 @@ pub enum ModelNodeParseError {
     UnexpectedEnumValue,
     UnknownNewestEventsType,
     NodeTooDeep,
+    StringTooLong,
     UnexpectedMapArrayEnd,
     UnexpectedParserState,
     UnexpectedNode(UnexpectedNodeError),

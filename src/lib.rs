@@ -16,7 +16,9 @@ mod device;
 mod appliances;
 mod common_types;
 mod node_key;
+mod parser_options;
 
 pub use device::*;
 pub use appliances::*;
 pub use common_types::*;
+pub use parser_options::ParserOptions;

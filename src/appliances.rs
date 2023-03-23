@@ -14,6 +14,7 @@ use crate::{config::*, Device};
 use crate::common_types::*;
 use crate::node_key::*;
 use crate::device::MacAddress;
+use crate::parser_options::{ParserOptions, copy_string_option};
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Appliance {
@@ -93,7 +94,7 @@ pub enum ApplianceSubNode {
     EchonetLiteProperty(EchonetLiteProperty),
 }
 
-type AppliancesParser = JsonParser<REQUIRED_APPLIANCES_PARSER_BUFFER_LEN, 7>;
+type AppliancesParser = JsonParser<REQUIRED_APPLIANCES_PARSER_BUFFER_LEN, 10>;
 
 #[derive(Clone, Copy, Debug)]
 enum AppliancesParserState {
@@ -133,6 +134,7 @@ impl AppliancesParserState {
 pub fn read_appliances<R: embedded_io::blocking::Read, F>(
     reader: &mut R,
     total_length: Option<usize>,
+    options: &ParserOptions,
     mut callback: F,
 ) -> Result<(), JsonParserError<R::Error, ModelNodeParseError>>
 where
@@ -219,7 +221,7 @@ where
                 if let Some(node_key) = node_key.take() {
                     match (node_key, value) {
                         (ModelNodeKey::Name, JsonScalarValue::String(s)) => {
-                            device.name = String::from(s)
+                            device.name = copy_string_option(s, options)?;
                         }
                         (ModelNodeKey::Id, JsonScalarValue::String(s)) => {
                             device.id = Uuid::from_str(s)?
@@ -237,10 +239,10 @@ where
                             device.bt_mac_address = MacAddress::from_str(s)?
                         }
                         (ModelNodeKey::SerialNumber, JsonScalarValue::String(s)) => {
-                            device.serial_number = String::from(s)
+                            device.serial_number = copy_string_option(s, options)?;
                         }
                         (ModelNodeKey::FirmwareVersion, JsonScalarValue::String(s)) => {
-                            device.firmware_version = String::from(s)
+                            device.firmware_version = copy_string_option(s, options)?;
                         }
                         (ModelNodeKey::TemperatureOffset, JsonScalarValue::Number(n)) => {
                             device.temperature_offset = n.into()
@@ -258,7 +260,7 @@ where
                 if let Some(node_key) = node_key.take() {
                     match (node_key, value) {
                         (ModelNodeKey::NickName, JsonScalarValue::String(s)) => {
-                            appliance.nickname = String::from(s)
+                            appliance.nickname = copy_string_option(s, options)?;
                         }
                         (ModelNodeKey::Id, JsonScalarValue::String(s)) => {
                             appliance.id = Uuid::from_str(s)?
@@ -267,7 +269,7 @@ where
                             appliance.type_ = ApplianceType::try_from(s).or(Err(ModelNodeParseError::UnexpectedEnumValue))?;
                         }
                         (ModelNodeKey::Image, JsonScalarValue::String(s)) => {
-                            appliance.image = String::from(s)
+                            appliance.image = copy_string_option(s, options)?;
                         }
                         _ => {} // Ignore unknown nodes.
                     }
@@ -283,25 +285,25 @@ where
                 if let Some(node_key) = node_key.take() {
                     match (node_key, value) {
                         (ModelNodeKey::Name, JsonScalarValue::String(s)) => {
-                            model.name = String::from(s)
+                            model.name = copy_string_option(s, options)?;
                         }
                         (ModelNodeKey::Id, JsonScalarValue::String(s)) => {
                             model.id = Uuid::from_str(s)?
                         }
                         (ModelNodeKey::Country, JsonScalarValue::String(s)) => {
-                            model.country = String::from(s)
+                            model.country = copy_string_option(s, options)?;
                         }
                         (ModelNodeKey::Manufacturer, JsonScalarValue::String(s)) => {
-                            model.manufacturer = String::from(s)
+                            model.manufacturer = copy_string_option(s, options)?;
                         }
                         (ModelNodeKey::RemoteName, JsonScalarValue::String(s)) => {
-                            model.remote_name = String::from(s)
+                            model.remote_name = copy_string_option(s, options)?;
                         }
                         (ModelNodeKey::Series, JsonScalarValue::String(s)) => {
-                            model.series = String::from(s)
+                            model.series = copy_string_option(s, options)?;
                         }
                         (ModelNodeKey::Image, JsonScalarValue::String(s)) => {
-                            model.image = String::from(s)
+                            model.image = copy_string_option(s, options)?;
                         }
                         _ => {} // Ignore unknown nodes.
                     }
@@ -317,13 +319,13 @@ where
                 if let Some(node_key) = node_key.take() {
                     match (node_key, value) {
                         (ModelNodeKey::Name, JsonScalarValue::String(s)) => {
-                            property.name = String::from(s);
+                            property.name = copy_string_option(s, options)?;
                         }
                         (ModelNodeKey::Epc, JsonScalarValue::Number(JsonNumber::I32(n))) => {
                             property.epc = n as u32;
                         }
                         (ModelNodeKey::Val, JsonScalarValue::String(s)) => {
-                            property.val = String::from(s);
+                            property.val = copy_string_option(s, options)?;
                         }
                         (ModelNodeKey::UpdatedAt, JsonScalarValue::String(s)) => {
                             property.updated_at = Timestamp::from_str(s)?;
@@ -357,7 +359,7 @@ where
 
 #[cfg(test)]
 mod test {
-    use crate::json::BufferReader;
+    use fuga_json_seq_parser::BufferReader;
     use uuid::uuid;
 
     use super::*;
@@ -375,7 +377,7 @@ mod test {
         ]
         ",
         );
-        read_appliances(&mut reader, Some(length), |_appliance, _sub_node| {
+        read_appliances(&mut reader, Some(length), &ParserOptions::default(), |_appliance, _sub_node| {
             panic!("callback must not be called for empty appliances.");
         })
         .unwrap();
@@ -470,6 +472,7 @@ mod test {
         read_appliances(
             &mut reader,
             Some(length),
+            &ParserOptions::default(),
             |appliance, sub_node| match sub_node {
                 None => {
                     let expected_appliance = expected_appliances_iter.next();

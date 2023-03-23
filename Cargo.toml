@@ -1,6 +1,6 @@
 [package]
 name = "fuga-remo-api"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Kenta IDA <fuga@fugafuga.org>"]
 edition = "2021"
 resolver = "2"
@@ -15,7 +15,7 @@ keywords = ["json", "no-std"]
 bbqueue = "0.5.1"
 chrono = { version = "0.4.22", default-features = false }
 embedded-io = "0.3.0"
-fuga-json-seq-parser = "0.1.0"
+fuga-json-seq-parser = "0.2.0"
 heapless = { version = "0.7.16" }
 hex = { version = "0.4.3", default-features = false }
 nom = { version = "7.1.1", default-features = false }

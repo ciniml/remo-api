@@ -7,7 +7,7 @@ fn main() {
     let mut parser: Parser<256, 10> = Parser::new();
     let mut reader = embedded_io::adapters::FromStd::new(&mut file);
     let mut indent_level = 0;
-    parser
+    while !parser
         .parse(&mut reader, |node| {
             match node {
                 JsonNode::EndMap => indent_level -= 1,
@@ -32,5 +32,7 @@ fn main() {
             }
             DefaultParserCallbackResult::Ok(ParserCallbackAction::Nothing)
         })
-        .unwrap();
+        .unwrap()
+    {
+    }
 }

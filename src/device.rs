@@ -381,6 +381,7 @@ where
                     DevicesParserState::UnknownMapArray
                 }
             }
+            (DevicesParserState::UnknownMapArray, _) => DevicesParserState::UnknownMapArray,    // Ignore unknown values in unknown map/array.
             (state, json_node) => {
                 let mut error = UnexpectedNodeError::new();
                 write!(&mut error, "{:?}", (state, json_node)).ok();

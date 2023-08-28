@@ -79,6 +79,14 @@
                 "superuser": true
             }
         ],
-        "newest_events": {}
+        "newest_events": {},
+        "commissionee_fabrics": [
+            {
+                "cfabric": "",
+                "vendor_name": "",
+                "company_name": "",
+                "label": ""
+            }
+        ]
     }
 ]
